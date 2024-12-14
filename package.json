@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "College mini project for web technologies. A simple online code editor platform with widely used language options and features to save code and view history",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "child-process": "^1.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
