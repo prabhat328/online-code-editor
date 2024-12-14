@@ -21,6 +21,16 @@ export const saveCode = async (req, res) => {
         return res.status(201).json({ message: "Code saved successfully", code: newCode });
     } catch (error) {
         console.error("Save Code Error:", error);
+
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+                message: "Invalid input",
+                errors: Object.keys(error.errors).map(field => ({
+                    field,
+                    error: error.errors[field].message
+                }))
+            });
+        }
         return res.status(500).json({ message: "Internal server error" });
     }
 };
