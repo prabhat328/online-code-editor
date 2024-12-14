@@ -1,5 +1,5 @@
 import Code from "../models/code.model.js";
-
+import mongoose from "mongoose";
 // Save or Update Code Controller
 export const saveCode = async (req, res) => {
     const { name, language, code } = req.body;
@@ -40,6 +40,11 @@ export const getAllSaves = async (req, res) => {
 // Get a Specific Code by ID
 export const getCode = async (req, res) => {
     const { codeId } = req.params;
+
+    // Check if codeId is a valid mongodb Object Id
+    if (!mongoose.isValidObjectId(codeId)) {
+        return res.status(400).json({ message: "The code Id is invalid" });
+    }
 
     try {
         const code = await Code.findOne({ _id: codeId, userId: req.user.userId });
