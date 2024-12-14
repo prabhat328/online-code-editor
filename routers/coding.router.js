@@ -4,6 +4,6 @@ import { runCode } from "../controllers/coding.controller.js";
 const router = express.Router();
 
 // Run a code
-router.post('/execute', runCode );
+router.post('/code/execute', runCode );
 
 export default router;
