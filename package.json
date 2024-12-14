@@ -1,0 +1,23 @@
+{
+  "name": "online-code-editor-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js"
+  },
+  "keywords": [],
+  "author": "prabhat328",
+  "license": "ISC",
+  "description": "College mini project for web technologies. A simple online code editor platform with widely used language options and features to save code and view history",
+  "dependencies": {
+    "child-process": "^1.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.9.0",
+    "nodemon": "^3.1.9"
+  }
+}
