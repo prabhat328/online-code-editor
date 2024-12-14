@@ -1,6 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Auth from "../models/auth.model.js";
+import { configDotenv } from "dotenv";
+
+configDotenv();
 
 // Secret key for JWT
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -45,6 +48,9 @@ export const register = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        if (password.length < 6 || password.length > 18) {
+            return res.status(400).json({ message: "Password length too short or large." });
+        }
         // Check if the email is already in use
         const existingUser = await Auth.findOne({ email });
         if (existingUser) {
