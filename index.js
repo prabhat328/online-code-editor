@@ -4,6 +4,8 @@ import { configDotenv } from "dotenv";
 import mongoose from "mongoose";
 
 import authRouter from "./routers/auth.router.js";
+import bookmarkRouter from "./routers/bookmark.router.js";
+import codingRouter from "./routers/coding.router.js";
 
 configDotenv();
 
@@ -15,6 +17,8 @@ app.use(cors('*'));
 
 app.get('/', (req, res) => res.json({ status: "Running" }));
 app.use('/auth', authRouter);
+app.use('/', bookmarkRouter);
+app.use('/', codingRouter);
 
 mongoose.connect(MONGODB_URI)
     .then(() => {

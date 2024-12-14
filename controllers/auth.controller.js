@@ -1,5 +1,9 @@
 import bcrypt from "bcryptjs";
-import Auth from "../models/auth.model";
+import jwt from "jsonwebtoken";
+import Auth from "../models/auth.model.js";
+
+// Secret key for JWT
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Login function
 export const login = async (req, res) => {
@@ -18,7 +22,18 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid password" });
         }
 
-        return res.status(200).json({ message: "Login successful", userId: user._id });
+        // Generate JWT token
+        const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+
+        // Set token as an HttpOnly cookie
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict",
+            maxAge: 3600000,
+        });
+
+        return res.status(200).json({ message: "Login successful" });
     } catch (error) {
         console.error("Error during login:", error);
         return res.status(500).json({ message: "Internal server error" });
@@ -43,9 +58,30 @@ export const register = async (req, res) => {
         const newUser = new Auth({ email, password: hashedPassword });
         await newUser.save();
 
-        return res.status(201).json({ message: "User registered successfully" });
+        // Generate JWT token
+        const token = jwt.sign({ userId: newUser._id, email: newUser.email }, JWT_SECRET, { expiresIn: "1h" });
+
+        // Set the token in an HTTP-only cookie
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict",
+            maxAge: 3600000,
+        });
+
+        return res.status(201).json({ message: "User registered successfully", token: token });
     } catch (error) {
         console.error("Error during registration:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
+};
+
+export const logout = (req, res) => {
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+    });
+
+    return res.status(200).json({ message: "Logout successful" });
 };
