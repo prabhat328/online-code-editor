@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
 const allowedLanguages = [
-    "JavaScript",
-    "Python",
-    "C++",
-    "Java"
+    "python",
+    "javascript",
+    "java",
+    "cpp",
+    "c",
 ];
 
 const codeSchema = mongoose.Schema(
